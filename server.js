@@ -1,11 +1,25 @@
 import express from "express";
 import "dotenv/config";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: "1mb" }));
-app.use(express.static(".")); // serves your index.html from repo root
+// Allow calls from your GitHub Pages and local file:// or localhost
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true); // curl / same-origin
+    if (
+      /^https?:\/\/localhost(:\d+)?$/.test(origin) ||
+      /https?:\/\/.*\.github\.io$/.test(origin)
+    ) return cb(null, true);
+    return cb(null, false);
+  },
+  methods: ["GET","POST"],
+  allowedHeaders: ["Content-Type","Authorization"]
+}));
+app.use(express.static(".")); // serves index.html when run locally
 
 // Local proxy to OpenAI (GPT-5 Nano)
 app.post("/api/gpt5nano", async (req, res) => {
