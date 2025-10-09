@@ -426,13 +426,25 @@
       if (!payload.system) return log("System prompt is empty.");
       if (!payload.examples) log("No examples provided. Consider adding 3–4 few-shots.");
 
-      // ---- CALL YOUR MODEL HERE -------------------------------------------
+      // ---- MODEL HERE -------------------------------------------
+    const API_BASE = (location.hostname.endsWith("github.io")) ? "http://localhost:3000" : "";
+    let data;
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 6000); // 6s timeout
       const res = await fetch("/api/gpt5nano", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
-      const data = await res.json();
+      clearTimeout(timer);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      data = await res.json();
+    } catch (e) {
+      log(`Backend not reachable (${String(e)}). Using local stub so you can still test UI.`);
+      data = stubbedModelResponse(payload);
+    }
 
 
       // Stubbed response (simulate model)
