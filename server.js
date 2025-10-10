@@ -14,7 +14,7 @@ app.use(cors({
       /^https?:\/\/localhost(:\d+)?$/.test(origin) ||
       /https?:\/\/.*\.github\.io$/.test(origin)
     ) return cb(null, true);
-    return cb(null, false);
+    return cb(null, true); // Allow other origins for development
   },
   methods: ["GET","POST"],
   allowedHeaders: ["Content-Type","Authorization"]
