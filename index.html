@@ -445,10 +445,6 @@
       log(`Backend not reachable (${String(e)}). Using local stub so you can still test UI.`);
       data = stubbedModelResponse(payload);
     }
-
-
-      // Stubbed response (simulate model)
-      const data = stubbedModelResponse(payload);
       // ----------------------------------------------------------------------
 
       const ms = Math.round(performance.now() - start);
