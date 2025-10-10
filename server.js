@@ -19,9 +19,8 @@ app.use(cors({
   methods: ["GET","POST"],
   allowedHeaders: ["Content-Type","Authorization"]
 }));
-app.use(express.static(".")); // serves index.html when run locally
 
-// Local proxy to OpenAI (GPT-5 Nano)
+// Local proxy to OpenAI (GPT-5 Nano) - MUST come before static files
 app.post("/api/gpt5nano", async (req, res) => {
   try {
     const { system, user, config } = req.body || {};
@@ -69,6 +68,9 @@ app.post("/api/gpt5nano", async (req, res) => {
     res.status(500).json({ error: String(err) });
   }
 });
+
+// Serve static files AFTER API routes
+app.use(express.static(".")); // serves index.html when run locally
 
 app.listen(PORT, () => {
   console.log(`Local server running on http://localhost:${PORT}`);
