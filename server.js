@@ -23,12 +23,12 @@ app.use(cors({
 // Local proxy to OpenAI (GPT-5 Nano) - MUST come before static files
 app.post("/api/gpt5nano", async (req, res) => {
   try {
-    const { system, user, config } = req.body || {};
+    const { system, user, config, task, examples } = req.body || {};
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({ error: "Missing OPENAI_API_KEY" });
     }
     if (!system || !user) {
-      return res.status(400).json({ error: "Missing 'system' or 'user' fields" });
+      return res.status(400).json({ error: "Missing 'system' or 'user' fields", received: { system: !!system, user: !!user } });
     }
 
     const payload = {
