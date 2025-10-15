@@ -432,7 +432,7 @@
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 6000); // 6s timeout
-      const res = await fetch("/api/gpt5nano", {
+      const res = await fetch(`${API_BASE}/api/gpt5nano`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
