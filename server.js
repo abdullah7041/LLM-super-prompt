@@ -37,7 +37,7 @@ app.post("/api/gpt5nano", async (req, res) => {
         { role: "system", content: system },
         { role: "user", content: user }
       ],
-      temperature: typeof config?.temperature === "number" ? config.temperature : 0.3,
+      temperature: typeof config?.temperature === "number" ? config.temperature : 1,
       top_p: typeof config?.top_p === "number" ? config.top_p : 1,
       // Force JSON output contract:
       response_format: { type: "json_object" }
